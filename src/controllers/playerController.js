@@ -7,16 +7,22 @@ const Player = require('../database/schemas/PlayerSchema')
 const generateToken = require('../functions/generateToken')
 
 /* FUNÇÃO DE VALIDAÇÃO */
-// const completeValidation = require('../functions/completeValidation')
+const completeValidation = require('../functions/completeValidation')
 
 
 /* ROTA DE REGISTRO */
 router.post('/register', async (req, res) => {
-    const { email } = req.body
+    const { email, character: personagem } = req.body
+
+    /* VALIDAÇÃO PARA VER SE O PERSONAGEM ESTÁ COM OS ATRIBUTOS DENTRO DO LIMITE */
+    const valid = completeValidation(personagem)
+    if (!valid) {
+        return res.status(400).json({ error: "Some attributes were wrong! Try to send another object!" })
+    }
 
     /* VALIDAÇÃO PARA VER SE JÁ NÃO EXISTE NO BANCO DE DADOS */
     if (await Player.findOne({ email })) {
-        return res.status(400).send({ error: 'This email already exists' })
+        return res.status(400).json({ error: 'This email already exists' })
     }
 
     const player = await Player.create(req.body)
