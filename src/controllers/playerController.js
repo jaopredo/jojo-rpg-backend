@@ -25,6 +25,7 @@ router.post('/register', async (req, res) => {
         return res.status(400).json({ error: 'This email already exists' })
     }
 
+    // Criando documento e salvando no meu Banco de Dados
     const player = await Player.create(req.body)
     player.password = undefined
 
