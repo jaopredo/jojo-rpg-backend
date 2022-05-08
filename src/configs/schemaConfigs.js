@@ -116,11 +116,11 @@ const charSpecsConfig = {
 }
 
 const charCombatConfig = {
-    life: Number,
-    mentalEnergy: Number,
-    movement: Number,
-    da: Number,
-    shield: Number
+    "life": Number,
+    "mentalEnergy": Number,
+    "movement": Number,
+    "da": Number,
+    "shield": Number
 }
 
 

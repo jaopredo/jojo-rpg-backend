@@ -18,7 +18,12 @@ const Character = {
     "basic": charBasicConfig,
     "attributes": charAttrConfig,
     "specialitys": charSpecsConfig,
-    "combat": charCombatConfig
+    "combat": charCombatConfig,
+    "level": {
+        "actualLevel": { type: Number, default: 1 },
+        "maxXP": { type: Number, default: configs.xpTable[0] },
+        "actualXP": { type: Number, default: 0 }
+    }
 }
 
 /* Objeto do Stand */
@@ -29,7 +34,8 @@ const Stand = {
 const PlayerSchema = new mongoose.Schema({
     ...playerConfig,
     "character": Character,
-    createdAt: {
+    "stand": Stand,
+    "createdAt": {
         type: Date,
         default: Date.now,
     }
