@@ -1,7 +1,9 @@
 const router = require('express').Router()
+const { v4 } = require('uuid')
 
 /* MONGODB */
 const Player = require('../database/schemas/PlayerSchema')
+const Character = require('../database/schemas/CharacterSchema')
 
 /* GENERATE TOKEN */
 const generateToken = require('../functions/generateToken')
@@ -12,13 +14,13 @@ const completeValidation = require('../functions/completeValidation')
 
 /* ROTA DE REGISTRO */
 router.post('/register', async (req, res) => {
-    const { email, character: personagem } = req.body
+    const { email, password, character: personagem } = req.body
 
     /* VALIDAÇÃO PARA VER SE O PERSONAGEM ESTÁ COM OS ATRIBUTOS DENTRO DO LIMITE */
-    const valid = completeValidation(personagem)
-    if (!valid) {
-        return res.status(400).json({ error: "Some attributes were wrong! Try to send another object!" })
-    }
+    // const valid = completeValidation(personagem)
+    // if (!valid) {
+    //     return res.status(400).json({ error: "Some attributes were wrong! Try to send another object!" })
+    // }
 
     /* VALIDAÇÃO PARA VER SE JÁ NÃO EXISTE NO BANCO DE DADOS */
     if (await Player.findOne({ email })) {
@@ -26,11 +28,22 @@ router.post('/register', async (req, res) => {
     }
 
     // Criando documento e salvando no meu Banco de Dados
-    const player = await Player.create(req.body)
+    const player = await Player.create({
+        id: v4(),
+        email: email,
+        password: password,
+    })
     player.password = undefined
 
+    // Criando o documento do meu personagem
+    const character = await Character.create({
+        playerId: player.id,
+        ...personagem
+    })
+
     return res.json({
-        character: player,
+        player: player,
+        character: character,
         token: generateToken({
             id: player.id,
             email: player.email,
@@ -53,8 +66,16 @@ router.post('/login', async (req, res) => {
         return res.status(400).send({ error: 'The passwords doesn\'t match' })
     }
 
+    // Se tiver o player normalmente, pego o Personagem
+    const character = await Character.findOne({ playerId: player.id })
+    
+    // Removo algumas coisas para melhorar a compreensão
+    player.password = undefined
+    character.playerId = undefined
+
     return res.json({
-        character: player,
+        player: player,
+        character: character,
         token: generateToken({
             id: player.id,
             email: player.email,

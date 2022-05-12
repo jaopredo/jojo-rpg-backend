@@ -1,21 +1,3 @@
-/* CONFIGURAÇÕES PLAYER  */
-const playerConfig = {
-    "email": {
-        type: String,
-        required: true,
-    },
-    "password": {
-        type: String,
-        required: true,
-        select: false,
-    },
-    "accessKey": {
-        type: String,
-        required: true,
-        default: "player",
-    },
-}
-
 /* CONFIGURAÇÕES DO PERSONAGEM */
 // Configuração do básico
 const charBasicConfig = {
@@ -53,6 +35,7 @@ const charAttrConfig = {
     "size": Number,
 }
 
+// Configuração das especialidades
 const charSpecsConfig = {
     "strengh": {
         "athletics": Boolean,
@@ -115,6 +98,7 @@ const charSpecsConfig = {
     },
 }
 
+// Configuração dos atributos de batalha
 const charCombatConfig = {
     "life": Number,
     "mentalEnergy": Number,
@@ -126,7 +110,6 @@ const charCombatConfig = {
 
 /* EXPORTANDO */
 module.exports = {
-    playerConfig,
     charBasicConfig,
     charAttrConfig,
     charSpecsConfig,

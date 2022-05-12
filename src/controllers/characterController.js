@@ -1,5 +1,6 @@
 const router = require('express').Router()
 
+const Character = require('../database/schemas/CharacterSchema')
 /* MONGO DB */
 const Player = require('../database/schemas/PlayerSchema')
 
@@ -15,7 +16,7 @@ router.get('/attributes', async (req, res) => {
             error: 'Nenhum player foi encontrado!'
         })
     }
-    const { character } = player 
+    const character = await Character.findOne({ playerId: player.id })
 
     return res.json(character.attributes)
 })
@@ -23,6 +24,7 @@ router.get('/attributes', async (req, res) => {
 // Método para retornar especialidades
 router.get('/specialitys', async (req, res) => {
     const email = req.query.email  // Pego o email
+    const attr = req.query.attr  // Pego o attr
 
     const player = await Player.findOne({ email })
     if (!player) {
@@ -30,8 +32,9 @@ router.get('/specialitys', async (req, res) => {
             error: 'Nenhum player encontrado!'
         })
     }
-    const { character } = player
+    const character = await Character.findOne({ playerId: player.id })
 
+    if (!!attr) return res.json(character.specialitys[attr])
     return res.json(character.specialitys)
 })
 
@@ -45,7 +48,7 @@ router.get('/combat', async (req, res) => {
             error: 'Nenhum player encontrado!'
         })
     }
-    const { character } = player
+    const character = await Character.findOne({ playerId: player.id })
 
     return res.json(character.combat)
 })
@@ -60,7 +63,7 @@ router.get('/level', async (req, res) => {
             error: 'Nenhum player encontrado!'
         })
     }
-    const { character } = player
+    const character = await Character.findOne({ playerId: player.id })
 
     return res.json(character.level)
 })
@@ -72,8 +75,70 @@ router.get('/level', async (req, res) => {
  */
 
 /* MÉTODOS PARA ATUALIZAR PERSONAGENS */
-router.patch('/levelup', (req, res) => {
-    
+/*  CONTINUAR POSTERIORMENTE
+router.patch('/levelup', async (req, res) => {
+    const {
+        email,
+        newSpec,
+        newAttr,
+    } = req.body
+
+    // Vendo se existe no database
+    const player = await Player.findOne({ email })
+    if (!player) {
+        return res.status(400).json({
+            error: 'Esse player não foi encontrado, tente novamente!'
+        })
+    }
+
+    /**
+     *  { education: { biology: true } }
+        ###############
+        {
+        strengh: {},
+        dexterity: {},
+        constituition: { force: true },
+        education: { tecnology: true, foreignLanguage: true, programming: true },
+        commonSense: { cooking: true, drive: true },
+        vigillance: {},
+        charisma: { sexy: true, persuasion: true }
+        }
+    *
+
+    // Specialitys and Attributes
+    const {
+        attributes,
+        specialitys
+    } = player.character
+    let corresponding, newPlayer
+
+    if (newSpec) {  // Se houver uma nova especialidade
+        console.log("Antes")
+        console.log(specialitys)
+        
+        for (spec of Object.keys(specialitys)) {  // Analiso de qual atributo é
+            if (spec == Object.keys(newSpec)[0]) corresponding = spec
+        }
+
+        const newAttrObj = {
+            ...specialitys[corresponding],
+            ...newSpec[corresponding]
+        }
+
+        const newSubObj = { ...specialitys }
+        newSubObj[corresponding] = newAttrObj
+
+        newPlayer = { ...player.character }
+    }
+
+    // await Player.updateOne({ email }, { character: 'trolado' })
+    console.log(newPlayer)
+
+    return res.json({
+        actualSpecs: specialitys,
+        newSpecs: newSpec
+    })
 })
+*/
 
 module.exports = app => app.use('/character', router)
