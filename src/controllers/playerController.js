@@ -17,10 +17,10 @@ router.post('/register', async (req, res) => {
     const { email, password, character: personagem } = req.body
 
     /* VALIDAÇÃO PARA VER SE O PERSONAGEM ESTÁ COM OS ATRIBUTOS DENTRO DO LIMITE */
-    // const valid = completeValidation(personagem)
-    // if (!valid) {
-    //     return res.status(400).json({ error: "Some attributes were wrong! Try to send another object!" })
-    // }
+    const valid = completeValidation(personagem)
+    if (!valid) {
+        return res.status(400).json({ error: "Some attributes were wrong! Try to send another object!" })
+    }
 
     /* VALIDAÇÃO PARA VER SE JÁ NÃO EXISTE NO BANCO DE DADOS */
     if (await Player.findOne({ email })) {

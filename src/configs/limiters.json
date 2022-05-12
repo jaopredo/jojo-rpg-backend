@@ -1,7 +1,8 @@
 {
     "maxLevel": 15,
     "maxAttrLevel": {
-        "rockhuman": 10,
+        "rockman": 10,
+        "human": 10,
         "vampire": 14,
         "alien": 12
     },

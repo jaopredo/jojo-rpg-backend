@@ -1,8 +1,9 @@
+const { xpTable, maxLevel } = require('../configs/limiters.json')
 const router = require('express').Router()
 
-const Character = require('../database/schemas/CharacterSchema')
 /* MONGO DB */
 const Player = require('../database/schemas/PlayerSchema')
+const Character = require('../database/schemas/CharacterSchema')
 
 
 /* MÉTODOS PARA RETORNO DOS ATRIBUTOS */
@@ -75,13 +76,13 @@ router.get('/level', async (req, res) => {
  */
 
 /* MÉTODOS PARA ATUALIZAR PERSONAGENS */
-/*  CONTINUAR POSTERIORMENTE
 router.patch('/levelup', async (req, res) => {
     const {
         email,
         newSpec,
         newAttr,
-    } = req.body
+    } = req.body  // Extraio os atributos
+    let newChar
 
     // Vendo se existe no database
     const player = await Player.findOne({ email })
@@ -90,55 +91,50 @@ router.patch('/levelup', async (req, res) => {
             error: 'Esse player não foi encontrado, tente novamente!'
         })
     }
+    // Se o player existe no database, pego o meu Personagem
+    const character = await Character.findOne({ playerId: player.id })
 
+    /* ALTERANDO O NÍVEL DO PERSONAGEM */
+    const { level } = character
+
+    if (level.actualLevel >= maxLevel) return res.json({ error: 'Já está no nível máximo!' })
+    level.actualLevel += 1
+    level.maxXP = xpTable[level.actualLevel-1]
+    level.actualXP = 0
+
+    /* ESPECIALIDADES E ATRIBUTOS */
     /**
-     *  { education: { biology: true } }
-        ###############
-        {
-        strengh: {},
-        dexterity: {},
-        constituition: { force: true },
-        education: { tecnology: true, foreignLanguage: true, programming: true },
-        commonSense: { cooking: true, drive: true },
-        vigillance: {},
-        charisma: { sexy: true, persuasion: true }
-        }
-    *
+     * Checo se tenho newSpec ou newAttr, se tiver newSpec:
+     * eu adiciono um objeto novo nas especialidades de acordo com o label e a especialidade
+     * passados dentro do objeto 'newSpec'.
+     */
+    if (!!newSpec) {
+        const { specialitys } = character
+        const { label, spec } = newSpec
+        specialitys[label][spec] = true
 
-    // Specialitys and Attributes
-    const {
-        attributes,
-        specialitys
-    } = player.character
-    let corresponding, newPlayer
+        await Character.updateOne({ playerId: player.id }, {
+            specialitys: specialitys,
+            level: level
+        })
+    }
+    if (!!newAttr) {
+        const { attributes } = character
+        const attr = Object.keys(newAttr)[0]
+        attributes[attr] = newAttr[attr]
 
-    if (newSpec) {  // Se houver uma nova especialidade
-        console.log("Antes")
-        console.log(specialitys)
-        
-        for (spec of Object.keys(specialitys)) {  // Analiso de qual atributo é
-            if (spec == Object.keys(newSpec)[0]) corresponding = spec
-        }
-
-        const newAttrObj = {
-            ...specialitys[corresponding],
-            ...newSpec[corresponding]
-        }
-
-        const newSubObj = { ...specialitys }
-        newSubObj[corresponding] = newAttrObj
-
-        newPlayer = { ...player.character }
+        await Character.updateOne({ playerId: player.id }, {
+            attributes: attributes,
+            level: level
+        })
     }
 
-    // await Player.updateOne({ email }, { character: 'trolado' })
-    console.log(newPlayer)
+    // Procuro o novo personagem porque ele foi atualizado na database
+    newChar = await Character.findOne({ playerId: player.id })
 
-    return res.json({
-        actualSpecs: specialitys,
-        newSpecs: newSpec
-    })
+    // Retorno ele
+    return res.json(newChar)
 })
-*/
+
 
 module.exports = app => app.use('/character', router)

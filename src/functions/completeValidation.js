@@ -1,4 +1,4 @@
-const configs = require('../configs/limiters.json')
+const { maxAttrLevel } = require('../configs/limiters.json')
 
 function completeValidation(character) {
     /*
@@ -6,18 +6,13 @@ function completeValidation(character) {
      * estão dentro dos limites.
     */
     const { race } = character.basic
-    const { maxAttrLevel: aMax } = configs
+    const { attributes } = character
 
     /* VALIDAÇÃO DOS ATRIBUTOS */
-    for (attribute of Object.values(character.attributes)) {
-        if ( (race == "human" || race == "rockman") && attribute > aMax.rockhuman ) {
-            return false
-        }
-        if ( race == "alien" && attribute > aMax.alien ) {
-            return false
-        }
-        if ( race == "vampire" && attribute > aMax.vampire ) {
-            return false
+    for (let lrace of Object.keys(maxAttrLevel)) {
+        console.log(lrace)
+        if (lrace === race) {
+            for (attr of Object.values(attributes)) if (attr > maxAttrLevel[lrace]) return false
         }
     }
     return true
