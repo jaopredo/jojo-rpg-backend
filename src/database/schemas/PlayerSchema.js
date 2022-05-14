@@ -1,5 +1,7 @@
 const mongoose = require('../connection')
 
+const log = require('../../functions/log')
+
 const PlayerSchema = new mongoose.Schema({  // Player Schema
     email: {
         type: String,
@@ -19,6 +21,16 @@ const PlayerSchema = new mongoose.Schema({  // Player Schema
         type: Date,
         default: Date.now,
     }
+})
+
+PlayerSchema.post('save', function(doc) {
+    const logMessage = `Um novo PLAYER criado
+    Criado: ${doc.createdAt}
+    Email: ${doc.email}
+    Id: ${doc.id}
+    `
+
+    log(logMessage, 'player')
 })
 
 const Player = mongoose.model('Player', PlayerSchema)

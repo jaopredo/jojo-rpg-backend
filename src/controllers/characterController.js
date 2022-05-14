@@ -97,10 +97,11 @@ router.patch('/levelup', async (req, res) => {
     /* ALTERANDO O NÍVEL DO PERSONAGEM */
     const { level } = character
 
+    // Checo se já está no nível máximo
     if (level.actualLevel >= maxLevel) return res.json({ error: 'Já está no nível máximo!' })
-    level.actualLevel += 1
-    level.maxXP = xpTable[level.actualLevel-1]
-    level.actualXP = 0
+    level.actualLevel += 1  // Aumento um nível
+    level.maxXP = xpTable[level.actualLevel-1]  // Coloco o XP máximo
+    level.actualXP = 0  // Reseto o XP atual
 
     /* ESPECIALIDADES E ATRIBUTOS */
     /**
@@ -109,22 +110,24 @@ router.patch('/levelup', async (req, res) => {
      * passados dentro do objeto 'newSpec'.
      */
     if (!!newSpec) {
-        const { specialitys } = character
+        const { specialitys, attributes } = character
         const { label, spec } = newSpec
         specialitys[label][spec] = true
 
         await Character.updateOne({ playerId: player.id }, {
-            specialitys: specialitys,
-            level: level
+                specialitys: specialitys,
+                attributes: attributes,
+                level: level
         })
     }
     if (!!newAttr) {
-        const { attributes } = character
+        const { specialitys, attributes } = character
         const attr = Object.keys(newAttr)[0]
         attributes[attr] = newAttr[attr]
 
         await Character.updateOne({ playerId: player.id }, {
             attributes: attributes,
+            specialitys: specialitys,
             level: level
         })
     }
