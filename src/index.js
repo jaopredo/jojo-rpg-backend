@@ -8,6 +8,7 @@ app.use(express.urlencoded({ extended: true }))
 
 require('./controllers/playerController')(app)
 require('./controllers/characterController')(app)
+require('./controllers/standController')(app)
 
 app.listen(process.env.PORT, () => {
     console.log(`Rodando na porta ${process.env.PORT}`)

@@ -34,3 +34,45 @@ Um novo PERSONAGEM criado
     Id: 628030b0f5ee0a54a8f07894
     Player Associado: 628030b0f5ee0a54a8f07892
     
+
+Um novo PERSONAGEM criado
+    Criado: Sat May 14 2022 21:08:45 GMT-0300 (Horário Padrão de Brasília)
+    Nome: Clara Binch
+    Id: 628044ccf81255cf20a5b835
+    Player Associado: 628044ccf81255cf20a5b833
+    
+
+Um novo PERSONAGEM criado
+    Criado: Sat May 14 2022 21:48:17 GMT-0300 (Horário Padrão de Brasília)
+    Nome: Clara Binch
+    Id: 62804dfd730dbfc7040fc71e
+    Player Associado: 62804dfd730dbfc7040fc71c
+    
+
+Um novo PERSONAGEM criado
+    Criado: Sat May 14 2022 21:48:17 GMT-0300 (Horário Padrão de Brasília)
+    Nome: Clara Binch
+    Id: 62804ed4730dbfc7040fc728
+    Player Associado: 62804ed4730dbfc7040fc726
+    
+
+Um novo PERSONAGEM criado
+    Criado: Sun May 15 2022 08:34:37 GMT-0300 (Horário Padrão de Brasília)
+    Nome: Clara Binch
+    Id: 6280e5619e71b64dca8988e8
+    Player Associado: 6280e5609e71b64dca8988e6
+    
+
+Um novo PERSONAGEM criado
+    Criado: Sun May 15 2022 09:17:14 GMT-0300 (Horário Padrão de Brasília)
+    Nome: Clara Binch
+    Id: 6280f1f98307ffb931ecd78a
+    Player Associado: 6280f1f88307ffb931ecd788
+    
+
+Um novo PERSONAGEM criado
+    Criado: Sun May 15 2022 09:17:14 GMT-0300 (Horário Padrão de Brasília)
+    Nome: Clara Binch
+    Id: 6280f21a8307ffb931ecd791
+    Player Associado: 6280f21a8307ffb931ecd78f
+    

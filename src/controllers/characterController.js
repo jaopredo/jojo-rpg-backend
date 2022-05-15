@@ -5,11 +5,19 @@ const router = require('express').Router()
 const Player = require('../database/schemas/PlayerSchema')
 const Character = require('../database/schemas/CharacterSchema')
 
+/* MIDDLEWARE */
+const masterAuth = require('../middlewares/masterAuth')
 
 /* MÉTODOS PARA RETORNO DOS ATRIBUTOS */
 // Método para retornar os atributos
-router.get('/attributes', async (req, res) => {
+router.get('/attributes', masterAuth, async (req, res) => {
     const email = req.query.email  // Pego o email passado na URL
+
+    if (!email) {
+        return res.status(404).json({
+            error: 'Email não foi informado na QUERY'
+        })
+    }
 
     const player = await Player.findOne({ email })
     if (!player) {
@@ -23,9 +31,15 @@ router.get('/attributes', async (req, res) => {
 })
 
 // Método para retornar especialidades
-router.get('/specialitys', async (req, res) => {
+router.get('/specialitys', masterAuth, async (req, res) => {
     const email = req.query.email  // Pego o email
     const attr = req.query.attr  // Pego o attr
+
+    if (!email) {
+        return res.status(404).json({
+            error: 'Email não foi informado na QUERY'
+        })
+    }
 
     const player = await Player.findOne({ email })
     if (!player) {
@@ -40,8 +54,14 @@ router.get('/specialitys', async (req, res) => {
 })
 
 // Método para retornar atributos de combate
-router.get('/combat', async (req, res) => {
+router.get('/combat', masterAuth, async (req, res) => {
     const email = req.query.email  // Pego o email
+
+    if (!email) {
+        return res.status(404).json({
+            error: 'Email não foi informado na QUERY'
+        })
+    }
 
     const player = await Player.findOne({ email })
     if (!player) {
@@ -55,8 +75,14 @@ router.get('/combat', async (req, res) => {
 })
 
 // Método para retornar atributos de level
-router.get('/level', async (req, res) => {
+router.get('/level', masterAuth, async (req, res) => {
     const email = req.query.email  // Pego o email
+
+    if (!email) {
+        return res.status(404).json({
+            error: 'Email não foi informado na QUERY'
+        })
+    }
 
     const player = await Player.findOne({ email })
     if (!player) {
@@ -76,13 +102,12 @@ router.get('/level', async (req, res) => {
  */
 
 /* MÉTODOS PARA ATUALIZAR PERSONAGENS */
-router.patch('/levelup', async (req, res) => {
+router.patch('/levelup', masterAuth, async (req, res) => {
     const {
         email,
         newSpec,
         newAttr,
     } = req.body  // Extraio os atributos
-    let newChar
 
     // Vendo se existe no database
     const player = await Player.findOne({ email })
@@ -133,7 +158,7 @@ router.patch('/levelup', async (req, res) => {
     }
 
     // Procuro o novo personagem porque ele foi atualizado na database
-    newChar = await Character.findOne({ playerId: player.id })
+    let newChar = await Character.findOne({ playerId: player.id })
 
     // Retorno ele
     return res.json(newChar)

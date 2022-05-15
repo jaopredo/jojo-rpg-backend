@@ -29,3 +29,48 @@ Um novo PLAYER criado
     Email: teste@gmail.com
     Id: 628030b0f5ee0a54a8f07892
     
+
+Um PLAYER foi deletado
+    Id: undefined
+    Email: undefined
+    Deletado: Sat May 14 2022 21:09:01 GMT-0300 (Horário Padrão de Brasília)
+
+Um novo PLAYER criado
+    Criado: Sat May 14 2022 21:09:48 GMT-0300 (Horário Padrão de Brasília)
+    Email: teste@gmail.com
+    Id: 628044ccf81255cf20a5b833
+
+Um PLAYER foi deletado
+    Id: undefined
+    Email: undefined
+    Deletado: Sat May 14 2022 21:09:55 GMT-0300 (Horário Padrão de Brasília)
+
+Um novo PLAYER criado
+    Criado: Sat May 14 2022 21:49:01 GMT-0300 (Horário Padrão de Brasília)
+    Email: teste@gmail.com
+    Id: 62804dfd730dbfc7040fc71c
+
+Um PLAYER foi deletado
+    Id: undefined
+    Email: undefined
+    Deletado: Sat May 14 2022 21:51:47 GMT-0300 (Horário Padrão de Brasília)
+
+Um novo PLAYER criado
+    Criado: Sat May 14 2022 21:52:36 GMT-0300 (Horário Padrão de Brasília)
+    Email: teste@gmail.com
+    Id: 62804ed4730dbfc7040fc726
+
+Um novo PLAYER criado
+    Criado: Sun May 15 2022 08:34:56 GMT-0300 (Horário Padrão de Brasília)
+    Email: teste@gmail.com
+    Id: 6280e5609e71b64dca8988e6
+
+Um novo PLAYER criado
+    Criado: Sun May 15 2022 09:28:40 GMT-0300 (Horário Padrão de Brasília)
+    Email: teste@gmail.com
+    Id: 6280f1f88307ffb931ecd788
+
+Um novo PLAYER criado
+    Criado: Sun May 15 2022 09:29:14 GMT-0300 (Horário Padrão de Brasília)
+    Email: teste@gmail.com
+    Id: 6280f21a8307ffb931ecd78f

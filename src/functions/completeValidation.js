@@ -9,9 +9,9 @@ function completeValidation(character) {
     const { attributes } = character
 
     /* VALIDAÇÃO DOS ATRIBUTOS */
+    // Para cada raça dentro das chaves de maxAttrLevel
     for (let lrace of Object.keys(maxAttrLevel)) {
-        console.log(lrace)
-        if (lrace === race) {
+        if (lrace === race) {  // Se a raça for igual a do player
             for (attr of Object.values(attributes)) if (attr > maxAttrLevel[lrace]) return false
         }
     }

@@ -1,17 +1,13 @@
 const configs = require('../../configs/limiters.json')
 const mongoose = require('../connection')
-const {
-    charBasicConfig,
-    charAttrConfig,
-    charSpecsConfig,
-    charCombatConfig
-} = require('../../configs/schemaConfigs')
 
 // Funções para calcular atributos
-const calcLife = require('../../functions/calcLife')
-const calcMentalEnergy = require('../../functions/calcMentalEnergy')
-const calcSuccessDifficult = require('../../functions/calcSuccessDifficult')
-const calcMovement = require('../../functions/calcMovement')
+const {
+    calcLife,
+    calcMentalEnergy,
+    calcSuccessDifficult,
+    calcMovement
+} = require('../../functions/charCombat')
 
 // Função de LOG
 const log = require('../../functions/log')
@@ -20,18 +16,103 @@ const log = require('../../functions/log')
 /* Schema do Personagem */
 const CharacterSchema = new mongoose.Schema({
     playerId: mongoose.Schema.Types.ObjectId,
-    basic: charBasicConfig,
-    attributes: charAttrConfig,
-    specialitys: charSpecsConfig,
-    combat: charCombatConfig,
+    basic: {
+        name: { type: String, required: true },
+        age: { type: Number, required: true, min: 20, max: 70 },
+        race: { type: String, required: true },
+        patent: { type: String, required: true },
+        ocupation: { type: String, required: true },
+    },
+    attributes: {
+        strengh: Number,
+        dexterity: Number,
+        constituition: Number,
+        education: Number,
+        commonSense: Number,
+        vigillance: Number,
+        charisma: Number,
+        size: Number,
+    },
+    specialitys: {
+        strengh: {
+            athletics: Boolean,
+            mindResistence: Boolean,
+            jump: Boolean,
+            fight: Boolean,
+            climb: Boolean
+        },
+        dexterity: {
+            acrobacy: Boolean,
+            stealth: Boolean,
+            aim: Boolean,
+            dodge: Boolean
+        },
+        constituition: {
+            force: Boolean,
+            imunity: Boolean,
+            painResistence: Boolean
+        },
+        education: {
+            history: Boolean,
+            geography: Boolean,
+            math: Boolean,
+            investigation: Boolean,
+            forensic: Boolean,
+            tecnology: Boolean,
+            sociology: Boolean,
+            art: Boolean,
+            physics: Boolean,
+            chemistry: Boolean,
+            foreignLanguage: Boolean,
+            programming: Boolean,
+            policy: Boolean,
+            religion: Boolean,
+            mechanic: Boolean,
+            biology: Boolean
+        },
+        commonSense: {
+            computer: Boolean,
+            medicine: Boolean,
+            bribery: Boolean,
+            survival: Boolean,
+            break: Boolean,
+            cooking: Boolean,
+            firstAid: Boolean,
+            drive: Boolean
+        },
+        vigillance: {
+            reflex: Boolean,
+            perception: Boolean,
+            insight: Boolean,
+        },
+        charisma: {
+            intimidation: Boolean,
+            cheating: Boolean,
+            acting: Boolean,
+            charm: Boolean,
+            sexy: Boolean,
+            persuasion: Boolean,
+        },
+    },
+    combat: {
+        life: Number,
+        mentalEnergy: Number,
+        movement: Number,
+        da: Number,
+        shield: Number
+    },
     level: {
-        "actualLevel": { type: Number, default: 1 },
-        "maxXP": { type: Number, default: configs.xpTable[0] },
-        "actualXP": { type: Number, default: 0 }
+        actualLevel: { type: Number, default: 1 },
+        maxXP: { type: Number, default: configs.xpTable[0] },
+        actualXP: { type: Number, default: 0 }
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: new Date()
+    },
+    updatedAt: {
+        type: Date,
+        default: new Date()
     }
 })
 CharacterSchema.pre('save', function(next) {
@@ -86,7 +167,7 @@ CharacterSchema.pre('save', function(next) {
 })
 CharacterSchema.pre('updateOne', async function(next) {
     // const thisChar = await this.model.findOne(this.getQuery());
-    const updateObj = this.getUpdate()
+    const updateObj = this.getUpdate()  // Pego as informações novas
 
     // Separando atributos e especialidades
     const { attributes, specialitys } = updateObj
@@ -135,7 +216,8 @@ CharacterSchema.pre('updateOne', async function(next) {
             movement: movement,
             da: successDifficult,
             shield: 0
-        }
+        },
+        updatedAt: new Date()
     })
 
     next()
@@ -152,6 +234,25 @@ CharacterSchema.post('save', function(doc) {
     `
 
     log(logMessage, 'char')
+})
+CharacterSchema.post('updateOne', function(doc){
+    const logMessage =  `PERSONAGEM atualizado
+    Criado: ${doc.createdAt},
+    Nome: ${doc.basic.name}
+    Id: ${doc.id}
+    Player Associado: ${doc.playerId}
+    Atualizado em: ${doc.updatedAt}`
+
+    log(logMessage, 'char')
+})
+CharacterSchema.post('deleteOne', function(doc){
+    // const logMessage = `PERSONAGEM deletado
+    // Deletado: ${new Date()}
+    // Nome: ${doc.basic.name}
+    // Id: ${doc.id}
+    // Player Associado: ${doc.playerId}`
+
+    // log(logMessage, 'char')
 })
 
 
