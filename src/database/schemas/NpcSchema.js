@@ -1,4 +1,3 @@
-const configs = require('../../configs/limiters.json')
 const mongoose = require('../connection')
 
 // Funções para calcular atributos
@@ -14,7 +13,7 @@ const log = require('../../functions/log')
 
 
 /* Schema do Personagem */
-const CharacterSchema = new mongoose.Schema({
+const NpcSchema = new mongoose.Schema({
     playerId: mongoose.Schema.Types.ObjectId,
     basic: {
         name: { type: String, required: true },
@@ -101,11 +100,6 @@ const CharacterSchema = new mongoose.Schema({
         da: Number,
         shield: Number
     },
-    level: {
-        actualLevel: { type: Number, default: 1 },
-        maxXP: { type: Number, default: configs.xpTable[0] },
-        actualXP: { type: Number, default: 0 }
-    },
     createdAt: {
         type: Date,
         default: new Date()
@@ -115,7 +109,7 @@ const CharacterSchema = new mongoose.Schema({
         default: new Date()
     }
 })
-CharacterSchema.pre('save', function(next) {
+NpcSchema.pre('save', function(next) {
     // Separando atributos e especialidades
     const { attributes, specialitys } = this
     const {
@@ -165,7 +159,7 @@ CharacterSchema.pre('save', function(next) {
     }
     next()
 })
-CharacterSchema.pre('updateOne', async function(next) {
+NpcSchema.pre('updateOne', async function(next) {
     // const thisChar = await this.model.findOne(this.getQuery());
     const updateObj = this.getUpdate()  // Pego as informações novas
 
@@ -227,6 +221,6 @@ CharacterSchema.pre('updateOne', async function(next) {
 // Fazendo logs
 
 
-const Character = mongoose.model('Character', CharacterSchema)
+const Npc = mongoose.model('Npc', NpcSchema)
 
-module.exports = Character
+module.exports = Npc

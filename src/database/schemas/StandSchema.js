@@ -15,7 +15,7 @@ const {
 // Basic, attributes, abilitys vão ser passados pela requisição, o resto vai ser feito automático
 const StandSchema = new mongoose.Schema({
     playerId: mongoose.Types.ObjectId,
-    charId: mongoose.Types.ObjectId,
+    npcId: mongoose.Types.ObjectId,
     basic: {
         name: { type: String, required: true },
         standType: { type: String, required: true },

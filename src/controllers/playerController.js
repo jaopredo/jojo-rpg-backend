@@ -6,6 +6,7 @@ const Player = require('../database/schemas/PlayerSchema')
 const Character = require('../database/schemas/CharacterSchema')
 const Stand = require('../database/schemas/StandSchema')
 const SubStand = require('../database/schemas/SubStandSchema')
+const Inventory = require('../database/schemas/InventorySchema')
 
 /* GENERATE TOKEN */
 const generateToken = require('../functions/generateToken')
@@ -58,7 +59,6 @@ router.post('/register', async (req, res) => {
     const stand = await Stand.create({
         id: v4(),
         playerId: player.id,
-        charId: character.id,
         ...persona
     })
 
@@ -67,11 +67,12 @@ router.post('/register', async (req, res) => {
         subStand = await SubStand.create({
             id: v4(),
             playerId: player.id,
-            charId: character.id,
-            standId: stand.id,
             ...secondaryStand
         })
     }
+
+    // Criando meu Inventário
+    await Inventory.create({ playerId: player.id })
 
     return res.json({
         player: player,
@@ -135,31 +136,5 @@ router.post('/check', async (req, res) => {
     })
 })
 
-/* DELETAR UM PLAYER */
-router.delete('/remove', masterAuth, async (req, res) => {
-    const access = req.access
-    if (access !== 'master') {
-        return res.status(404).json({ error: 'Acesso negado! Deve ser um mestre' })
-    }
-    const email = req.query.email
-
-    // Checando se o email foi passado
-    if (!email) return res.status(404).json({ error: 'Email não foi informado na QUERY' })
-
-    // Checo se tem o player informado
-    const player = await Player.findOne({ email })
-    // Se não tiver mando erro
-    if (!player) return res.status(404).json({ error: 'Player não encontrado!' })
-
-    // Deleto o player e o personagem passado
-    await Character.deleteOne({ playerId: player.id })
-    await Stand.deleteOne({ playerId: player.id })
-    await SubStand.deleteOne({ playerId: player.id })
-    await Player.deleteOne({ email })
-
-    return res.status(200).json({
-        message: 'Player deletado com sucesso!'
-    })
-})
 
 module.exports = app => app.use('/player', router)

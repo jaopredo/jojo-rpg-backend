@@ -4,6 +4,7 @@ const router = require('express').Router()
 /* MONGO DB */
 const Player = require('../database/schemas/PlayerSchema')
 const Character = require('../database/schemas/CharacterSchema')
+const Inventory = require('../database/schemas/InventorySchema')
 
 /* MIDDLEWARE */
 const masterAuth = require('../middlewares/masterAuth')
@@ -11,20 +12,15 @@ const masterAuth = require('../middlewares/masterAuth')
 /* MÉTODOS PARA RETORNO DOS ATRIBUTOS */
 // Método para retornar os atributos
 router.get('/attributes', masterAuth, async (req, res) => {
-    const email = req.query.email  // Pego o email passado na URL
-
-    if (!email) {
-        return res.status(404).json({
-            error: 'Email não foi informado na QUERY'
-        })
-    }
-
-    const player = await Player.findOne({ email })
-    if (!player) {
-        return res.status(400).json({
+    // Procuro um player com o ID passado
+    const player = await Player.findById(req.id)
+    if (!player) {  // Se não houver nenhum player
+        return res.status(400).json({  // Retorno um erro
             error: 'Nenhum player foi encontrado!'
         })
     }
+
+    // Se tudo der certo, procuro o personagem com o playerId
     const character = await Character.findOne({ playerId: player.id })
 
     return res.json(character.attributes)
@@ -32,21 +28,16 @@ router.get('/attributes', masterAuth, async (req, res) => {
 
 // Método para retornar especialidades
 router.get('/specialitys', masterAuth, async (req, res) => {
-    const email = req.query.email  // Pego o email
     const attr = req.query.attr  // Pego o attr
 
-    if (!email) {
-        return res.status(404).json({
-            error: 'Email não foi informado na QUERY'
+    // Procuro um player com o ID passado
+    const player = await Player.findById(req.id)
+    if (!player) {  // Se não houver nenhum player
+        return res.status(400).json({  // Retorno um erro
+            error: 'Nenhum player foi encontrado!'
         })
     }
 
-    const player = await Player.findOne({ email })
-    if (!player) {
-        return res.status(400).json({
-            error: 'Nenhum player encontrado!'
-        })
-    }
     const character = await Character.findOne({ playerId: player.id })
 
     if (!!attr) return res.json(character.specialitys[attr])
@@ -55,15 +46,7 @@ router.get('/specialitys', masterAuth, async (req, res) => {
 
 // Método para retornar atributos de combate
 router.get('/combat', masterAuth, async (req, res) => {
-    const email = req.query.email  // Pego o email
-
-    if (!email) {
-        return res.status(404).json({
-            error: 'Email não foi informado na QUERY'
-        })
-    }
-
-    const player = await Player.findOne({ email })
+    const player = await Player.findById(req.id)
     if (!player) {
         return res.status(400).json({
             error: 'Nenhum player encontrado!'
@@ -76,15 +59,7 @@ router.get('/combat', masterAuth, async (req, res) => {
 
 // Método para retornar atributos de level
 router.get('/level', masterAuth, async (req, res) => {
-    const email = req.query.email  // Pego o email
-
-    if (!email) {
-        return res.status(404).json({
-            error: 'Email não foi informado na QUERY'
-        })
-    }
-
-    const player = await Player.findOne({ email })
+    const player = await Player.findById(req.id)
     if (!player) {
         return res.status(400).json({
             error: 'Nenhum player encontrado!'
@@ -104,13 +79,12 @@ router.get('/level', masterAuth, async (req, res) => {
 /* MÉTODOS PARA ATUALIZAR PERSONAGENS */
 router.patch('/levelup', masterAuth, async (req, res) => {
     const {
-        email,
         newSpec,
         newAttr,
     } = req.body  // Extraio os atributos
 
     // Vendo se existe no database
-    const player = await Player.findOne({ email })
+    const player = await Player.findById(req.id)
     if (!player) {
         return res.status(400).json({
             error: 'Esse player não foi encontrado, tente novamente!'
@@ -162,6 +136,16 @@ router.patch('/levelup', masterAuth, async (req, res) => {
 
     // Retorno ele
     return res.json(newChar)
+})
+
+// Adicionar algum item no inventário
+router.patch('/inventory/add', masterAuth, async (req, res) => {
+    const player = await Player.findById(req.id)
+    if (!player) res.json({ error: 'Player não encontrado' })
+
+    await Inventory.updateOne({ playerId: req.id }, { $push: { items: req.body.item } })
+
+    return res.send('oi')
 })
 
 

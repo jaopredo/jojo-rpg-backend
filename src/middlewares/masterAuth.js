@@ -29,6 +29,8 @@ module.exports = (req, res, next) => {
     jwt.verify(token, process.env.APP_HASH, (err, decoded) => {
         if (err) res.status(401).send({ error: 'Invalid token' })
         req.access = decoded.accessKey
+        req.id = decoded.id
+        req.email = decoded.email
         return next();
     })
     /*
