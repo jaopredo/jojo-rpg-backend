@@ -8,18 +8,17 @@ const Stand = require('../database/schemas/StandSchema')
 const SubStand = require('../database/schemas/SubStandSchema')
 const Inventory = require('../database/schemas/InventorySchema')
 
-/* GENERATE TOKEN */
+/* FUNCTIONS */
 const generateToken = require('../functions/generateToken')
-
-/* FUNÇÃO DE VALIDAÇÃO */
-const completeValidation = require('../functions/completeValidation')
+const advantages = require('../functions/advantages')
 
 /* MIDDLEWARE */
 const masterAuth = require('../middlewares/masterAuth')
+const completeValidation = require('../middlewares/completeValidation')
 
 
 /* ROTA DE REGISTRO */
-router.post('/register', async (req, res) => {
+router.post('/register', completeValidation, async (req, res) => {
     const {
         email,
         password,
@@ -29,16 +28,7 @@ router.post('/register', async (req, res) => {
     } = req.body
     let subStand
 
-    /* VALIDAÇÃO PARA VER SE O PERSONAGEM ESTÁ COM OS ATRIBUTOS DENTRO DO LIMITE */
-    const valid = completeValidation(personagem)
-    if (!valid) {
-        return res.status(400).json({ error: "Some attributes were wrong! Try to send another object!" })
-    }
-
     /* VALIDAÇÃO PARA VER SE JÁ NÃO EXISTE NO BANCO DE DADOS */
-    if (await Player.findOne({ email })) {
-        return res.status(400).json({ error: 'This email already exists' })
-    }
 
     // Criando documento e salvando no meu Banco de Dados
     const player = await Player.create({
@@ -52,7 +42,7 @@ router.post('/register', async (req, res) => {
     const character = await Character.create({
         id: v4(),
         playerId: player.id,
-        ...personagem
+        ...advantages(personagem)
     })
 
     // Criando documento do meu stand
@@ -130,6 +120,10 @@ router.post('/check', async (req, res) => {
     } else {
         exists = false
     }
+
+    console.log(generateToken({
+        accessKey: 'master'
+    }))
 
     return res.json({
         exists: exists

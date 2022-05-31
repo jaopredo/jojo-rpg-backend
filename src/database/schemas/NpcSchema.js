@@ -14,7 +14,6 @@ const log = require('../../functions/log')
 
 /* Schema do Personagem */
 const NpcSchema = new mongoose.Schema({
-    playerId: mongoose.Schema.Types.ObjectId,
     basic: {
         name: { type: String, required: true },
         age: { type: Number, required: true, min: 20, max: 70 },

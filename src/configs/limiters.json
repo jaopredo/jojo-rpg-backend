@@ -21,5 +21,50 @@
         961,
         1024,
         1089
-    ]
+    ],
+    "racesAdvantages": {
+        "human": {
+            "attribute": [
+                ["charisma", 2]
+            ],
+            "specs": [
+                ["charm", "charisma"],
+                ["sexy", "charisma"],
+                ["bribery", "commonSense"]
+            ]
+        },
+        "vampire": {
+            "attribute": [
+                ["strengh", 1],
+                ["constituition", 1]
+            ],
+            "specs": [
+                ["painResistence", "strengh"],
+                ["force", "constituition"],
+                ["intimidation", "charisma"],
+                ["cheating", "charisma"]
+            ]
+        },
+        "alien": {
+            "attribute": [
+                ["vigillance", 2]
+            ],
+            "specs": [
+                ["perception", "vigillance"],
+                ["medicine", "commonSense"],
+                ["cheating", "charisma"]
+            ]
+        },
+        "rockman": {
+            "attribute": [
+                ["vigillance", 1],
+                ["education", 1]
+            ],
+            "specs": [
+                ["painResistence", "strengh"],
+                ["survival", "commonSense"],
+                ["acting", "charisma"]
+            ]
+        }
+    }
 }

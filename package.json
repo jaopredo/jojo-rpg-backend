@@ -10,10 +10,10 @@
     "dev": "nodemon src/index.js"
   },
   "keywords": [
-      "rpg",
-      "backend",
-      "nodejs",
-      "jojo"
+    "rpg",
+    "backend",
+    "nodejs",
+    "jojo"
   ],
   "dependencies": {
     "dotenv": "^16.0.0",

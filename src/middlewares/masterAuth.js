@@ -23,7 +23,6 @@ module.exports = (req, res, next) => {
 
     // Se a primeira parte não começar com JOJO eu retorno um erro
     if (!/^JOJO$/i.test(scheme)) return res.status(401).send({ error: 'Token errado' })
-    console.log(token)
 
     // Faço uma verificação pelo JWT para saber se o token é valido
     jwt.verify(token, process.env.APP_HASH, (err, decoded) => {

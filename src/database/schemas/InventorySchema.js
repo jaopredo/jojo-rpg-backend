@@ -12,6 +12,7 @@ const ItemSchema = new mongoose.Schema({
         slashing: Boolean,
         explosion: Boolean,
         concussion: Boolean,
+        heal: Boolean,
     }
 });
 
