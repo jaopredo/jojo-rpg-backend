@@ -5,6 +5,9 @@ module.exports = (req, res, next) => {
      * Uma validação completa a partir do objeto do personagem, conferindo se todos os valores
      * estão dentro dos limites.
     */
+    if (!req.body.character) {
+        return res.json({error: 'Nenhum personagem informado!'})
+    }
     const { race } = req.body.character.basic
     const { attributes } = req.body.character
 

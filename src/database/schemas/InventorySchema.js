@@ -5,8 +5,12 @@ const ItemSchema = new mongoose.Schema({
     name: { type: String, required: true },
     quantity: { type: Number, required: true, default: 1 },
     weapon: { type: Boolean, default: false },
+    details: { type: String, default: "" },
+    damage: String,
+    critic: String,
+    tipo: String,
+    range: String,
     effects: {
-        damage: String,
         burning: Boolean,
         bullet: Boolean,
         slashing: Boolean,

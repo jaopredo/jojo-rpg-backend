@@ -20,8 +20,7 @@ const CharacterSchema = new mongoose.Schema({
         name: { type: String, required: true },
         age: { type: Number, required: true, min: 20, max: 70 },
         race: { type: String, required: true },
-        patent: { type: String, required: true },
-        ocupation: { type: String, required: true },
+        occupation: { type: String, required: true },
     },
     attributes: {
         strengh: Number,
@@ -99,7 +98,6 @@ const CharacterSchema = new mongoose.Schema({
         mentalEnergy: Number,
         movement: Number,
         da: Number,
-        shield: Number
     },
     level: {
         actualLevel: { type: Number, default: 1 },
@@ -157,7 +155,9 @@ CharacterSchema.pre('save', function(next) {
     )
 
     this.combat = {  // Coloco o novo objeto dentro do Schema a ser salvo
+        actualLife: life,
         life: life,
+        actualMentalEnergy: mentalEnergy,
         mentalEnergy: mentalEnergy,
         movement: movement,
         da: successDifficult,
@@ -222,10 +222,6 @@ CharacterSchema.pre('updateOne', async function(next) {
 
     next()
 })
-
-
-// Fazendo logs
-
 
 const Character = mongoose.model('Character', CharacterSchema)
 

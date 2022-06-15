@@ -2,7 +2,6 @@ const { xpTable, maxLevel } = require('../configs/limiters.json')
 const router = require('express').Router()
 
 /* MONGO DB */
-const Player = require('../database/schemas/PlayerSchema')
 const Character = require('../database/schemas/CharacterSchema')
 
 /* MIDDLEWARE */
@@ -10,36 +9,12 @@ const masterAuth = require('../middlewares/masterAuth')
 const charValidation = require('../middlewares/charValidation')
 
 /* MÉTODOS PARA RETORNO DOS ATRIBUTOS */
-// Método para retornar os atributos
-router.get('/attributes', masterAuth, charValidation, async (req, res) => {
-    // Se tudo der certo, procuro o personagem com o playerId
-    const character = await Character.findOne({ playerId: req.playerId })
-
-    return res.json(character.attributes)
-})
-
-// Método para retornar especialidades
-router.get('/specialitys', masterAuth, charValidation, async (req, res) => {
-    const attr = req.query.attr  // Pego o attr
-
+// Retorna tudo
+router.get('/', masterAuth, charValidation, async (req, res) => {
     const character = await Character.findOne({ playerId: req.id })
 
-    if (!!attr) return res.json(character.specialitys[attr])
-    return res.json(character.specialitys)
+    return res.json(character);
 })
-
-// Método para retornar atributos de combate
-router.get('/combat', masterAuth, charValidation, async (req, res) => {
-    const character = await Character.findOne({ playerId: req.id })
-    return res.json(character.combat)
-})
-
-// Método para retornar atributos de level
-router.get('/level', masterAuth, charValidation, async (req, res) => {
-    const character = await Character.findOne({ playerId: req.id })
-    return res.json(character.level)
-})
-
 
 /**
  * A partir daqui são algumas requisições que serão mais utilizadas pelo administrador do sistema,

@@ -13,12 +13,19 @@ const generateToken = require('../functions/generateToken')
 const advantages = require('../functions/advantages')
 
 /* MIDDLEWARE */
-const masterAuth = require('../middlewares/masterAuth')
 const completeValidation = require('../middlewares/completeValidation')
+const checkPlayerDatabase = require('../middlewares/checkPlayerDatabase')
 
+router.get('/teste', (req, res) => {
+    return res.send({teste: 'teste'});
+})
+router.post('/teste', (req, res) => {
+    console.log(req.body)
+    return res.send({teste: 'teste'})
+})
 
 /* ROTA DE REGISTRO */
-router.post('/register', completeValidation, async (req, res) => {
+router.post('/register', checkPlayerDatabase, completeValidation, async (req, res) => {
     const {
         email,
         password,
@@ -28,7 +35,10 @@ router.post('/register', completeValidation, async (req, res) => {
     } = req.body
     let subStand
 
-    /* VALIDAÇÃO PARA VER SE JÁ NÃO EXISTE NO BANCO DE DADOS */
+    /* VALIDAÇÃO PARA VER SE O EMAIL FOI PASSADO */
+    if (!email) {
+        return res.json({error: 'Nenhum email informado!'})
+    }
 
     // Criando documento e salvando no meu Banco de Dados
     const player = await Player.create({
@@ -65,10 +75,6 @@ router.post('/register', completeValidation, async (req, res) => {
     await Inventory.create({ playerId: player.id })
 
     return res.json({
-        player: player,
-        character: character,
-        stand: stand,
-        subStand: subStand,
         token: generateToken({
             id: player.id,
             email: player.email,
@@ -120,10 +126,6 @@ router.post('/check', async (req, res) => {
     } else {
         exists = false
     }
-
-    console.log(generateToken({
-        accessKey: 'master'
-    }))
 
     return res.json({
         exists: exists
