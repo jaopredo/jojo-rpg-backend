@@ -31,14 +31,11 @@ router.post('/register', checkPlayerDatabase, completeValidation, async (req, re
         password,
         character: personagem,
         stand: persona,
-        subStand: secondaryStand
-    } = req.body
-    let subStand
+        substand: secondaryStand
+    } = req.body;
 
     /* VALIDAÇÃO PARA VER SE O EMAIL FOI PASSADO */
-    if (!email) {
-        return res.json({error: 'Nenhum email informado!'})
-    }
+    if (!email) return res.json({error: 'Nenhum email informado!'})
 
     // Criando documento e salvando no meu Banco de Dados
     const player = await Player.create({
@@ -49,22 +46,23 @@ router.post('/register', checkPlayerDatabase, completeValidation, async (req, re
     player.password = undefined
 
     // Criando o documento do meu personagem
-    const character = await Character.create({
+    await Character.create({
         id: v4(),
         playerId: player.id,
         ...advantages(personagem)
     })
 
     // Criando documento do meu stand
-    const stand = await Stand.create({
+    await Stand.create({
         id: v4(),
         playerId: player.id,
         ...persona
     })
 
     // Tentando criar o SUB-STAND
+    console.log(secondaryStand)
     if (secondaryStand) {
-        subStand = await SubStand.create({
+        await SubStand.create({
             id: v4(),
             playerId: player.id,
             ...secondaryStand

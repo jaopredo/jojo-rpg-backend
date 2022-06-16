@@ -10,9 +10,8 @@ const charValidation = require('../middlewares/charValidation')
 /* ROTAS GET */
 // Retorna tudo
 router.get('/', masterAuth, charValidation, async(req, res) => {
-    const stand = await Stand.findOne({ playerId: req.id });
+    const stand = await Stand.findOne({ playerId: req.id })
     return res.json(stand);
 })
-
 
 module.exports = app => app.use('/stand', router)
