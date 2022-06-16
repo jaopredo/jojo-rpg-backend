@@ -90,29 +90,20 @@ router.post('/login', async (req, res) => {
     const player = await Player.findOne({ email }).select('+password')
     
     // Se o player não tiver sido encontrado
-    if (!player) {
-        return res.status(400).send({ error: 'This email isn\'t in our databases!' })
-    }
-    if (player.password !== password) {
-        return res.status(400).send({ error: 'The passwords doesn\'t match' })
-    }
-
-    // Se tiver o player normalmente, pego o Personagem
-    const character = await Character.findOne({ playerId: player.id })
-    
-    // Removo algumas coisas para melhorar a compreensão
-    player.password = undefined
-    character.playerId = undefined
-
-    return res.json({
-        player: player,
-        character: character,
-        token: generateToken({
-            id: player.id,
-            email: player.email,
-            access: player.accessKey
-        })
+    if (!player) return res.json({
+        error: true,
+        msg: 'Este email não existe!'
     })
+    if (player.password !== password) return res.json({
+        error: true,
+        msg: 'Esta senha está incorreta!'
+    })
+
+    return res.json({ token: generateToken({
+        id: player.id,
+        email: player.email,
+        access: player.accessKey
+    })})
 })
 
 /* TESTAR SE TEM O EMAIL NO BANCO DE DADOS */

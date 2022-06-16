@@ -7,7 +7,7 @@ const ItemSchema = new mongoose.Schema({
     weapon: { type: Boolean, default: false },
     details: { type: String, default: "" },
     damage: String,
-    critic: String,
+    critic: Number,
     tipo: String,
     range: String,
     effects: {

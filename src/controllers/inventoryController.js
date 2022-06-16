@@ -15,17 +15,19 @@ router.get('/', masterAuth, charValidation, async (req, res) => {
 
 // Adicionar algum item no inventário
 router.put('/item', masterAuth, charValidation,  async (req, res) => {
-    await Inventory.updateOne({ playerId: req.id }, { $push: { items: req.body } })
-    return res.send({ msg: 'Success' })
+    await Inventory.updateOne({ playerId: req.id }, { $push: { items: req.body } });
+    const inventory = await Inventory.findOne({ playerId: req.id });
+    return res.send(inventory);
 })
 
 // Remove item
 router.delete('/item', masterAuth, charValidation, async (req, res) => {
     const { itemId } = req.query;
-    
-    await Inventory.updateOne({ playerId: req.id }, { $pull: { items: { _id: itemId } } })
 
-    return res.json({ msg: 'Success' });
+    await Inventory.updateOne({ playerId: req.id }, { $pull: { items: { _id: itemId } } })
+    const inventory = await Inventory.findOne({ playerId: req.id });
+
+    return res.json(inventory);
 })
 
 // Atualiza um item
@@ -40,7 +42,8 @@ router.patch('/item', masterAuth, charValidation, async (req, res) => {
             }
         }
     )
-    return res.json({ msg: 'Success' })
+    const inventory = await Inventory.findOne({ playerId: req.id });
+    return res.json(inventory)
 }) 
 
 
