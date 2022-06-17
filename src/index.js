@@ -4,7 +4,7 @@ const cors = require('cors')
 
 const app = express()
 
-app.use(cors())
+app.use(cors({ origin: 'https://jojo-rpg-frontend.heroku.app' }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
@@ -16,4 +16,4 @@ require('./controllers/dmController')(app)
 require('./controllers/npcController')(app)
 require('./controllers/inventoryController')(app)
 
-app.listen(process.env.PORT || 3000)
+app.listen(process.env.PORT || 3030)
