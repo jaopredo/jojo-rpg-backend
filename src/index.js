@@ -16,6 +16,4 @@ require('./controllers/dmController')(app)
 require('./controllers/npcController')(app)
 require('./controllers/inventoryController')(app)
 
-app.listen(4040, () => {
-    console.log(`Rodando na porta ${4040}`)
-})
+app.listen(process.env.PORT || 3000)
