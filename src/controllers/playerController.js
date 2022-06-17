@@ -60,7 +60,6 @@ router.post('/register', checkPlayerDatabase, completeValidation, async (req, re
     })
 
     // Tentando criar o SUB-STAND
-    console.log(secondaryStand)
     if (secondaryStand) {
         await SubStand.create({
             id: v4(),
@@ -76,7 +75,6 @@ router.post('/register', checkPlayerDatabase, completeValidation, async (req, re
         token: generateToken({
             id: player.id,
             email: player.email,
-            access: player.accessKey
         })
     })
 })

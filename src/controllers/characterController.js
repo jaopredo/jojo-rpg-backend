@@ -22,7 +22,31 @@ router.get('/', masterAuth, charValidation, async (req, res) => {
  */
 
 /* MÉTODOS PARA ATUALIZAR PERSONAGENS */
+router.patch('/saveXP', masterAuth, charValidation, async (req, res) => {
+    const { newXP } = req.body;  // Pego o xp passado
+    
+    const { level } = await Character.findOne({ playerId: req.id })
+
+    if (newXP === -1) return res.json({ msg: 'not updated' })
+    await Character.updateOne({ playerId: req.id }, {
+        level: {
+            actualXP: newXP,
+            maxXP: level.maxXP,
+            actualLevel: level.actualLevel
+        }
+    })
+
+    return res.json({ msg: 'success' })
+})
+
 router.patch('/levelup', masterAuth, charValidation, async (req, res) => {
+    /*
+        newSpec: {
+            label: 'strengh',
+            spec: 'athletics',
+        },
+        newAttr: { constituition: 8 }
+    */
     const {
         newSpec,
         newAttr,
@@ -33,12 +57,11 @@ router.patch('/levelup', masterAuth, charValidation, async (req, res) => {
 
     /* ALTERANDO O NÍVEL DO PERSONAGEM */
     const { level } = character
-
     // Checo se já está no nível máximo
     if (level.actualLevel >= maxLevel) return res.json({ error: 'Já está no nível máximo!' })
-    level.actualLevel += 1  // Aumento um nível
-    level.maxXP = xpTable[level.actualLevel-1]  // Coloco o XP máximo
-    level.actualXP = 0  // Reseto o XP atual
+    level.actualLevel += 1;
+    level.maxXP = xpTable[level.actualLevel];
+    level.actualXP = 0;
 
     /* ESPECIALIDADES E ATRIBUTOS */
     /**
@@ -52,28 +75,24 @@ router.patch('/levelup', masterAuth, charValidation, async (req, res) => {
         specialitys[label][spec] = true
 
         await Character.updateOne({ playerId: req.id }, {
-                specialitys: specialitys,
-                attributes: attributes,
-                level: level
+            specialitys: specialitys,
+            attributes: attributes,
+            level: level,
         })
     }
     if (!!newAttr) {
-        const { specialitys, attributes } = character
-        const attr = Object.keys(newAttr)[0]
-        attributes[attr] = newAttr[attr]
+        const { specialitys, attributes } = character  // Pego os atributos e especialidades do meu obj
+        const attr = Object.keys(newAttr)[0]  // Pego o primeiro valor de newAttr, no caso o atributo
+        attributes[attr] = newAttr[attr]  // Coloco o novo valor
 
         await Character.updateOne({ playerId: req.id }, {
             attributes: attributes,
             specialitys: specialitys,
-            level: level
+            level: level,
         })
     }
-
-    // Procuro o novo personagem porque ele foi atualizado na database
-    let newChar = await Character.findOne({ playerId: req.id })
-
     // Retorno ele
-    return res.json(newChar)
+    return res.json({ msg: 'success' })
 })
 
 

@@ -100,7 +100,7 @@ const CharacterSchema = new mongoose.Schema({
         da: Number,
     },
     level: {
-        actualLevel: { type: Number, default: 1 },
+        actualLevel: { type: Number, default: 1, min: 1, max: configs.maxLevel },
         maxXP: { type: Number, default: configs.xpTable[0] },
         actualXP: { type: Number, default: 0 }
     },
@@ -166,60 +166,63 @@ CharacterSchema.pre('save', function(next) {
     next()
 })
 CharacterSchema.pre('updateOne', async function(next) {
-    // const thisChar = await this.model.findOne(this.getQuery());
+    const thisChar = await this.model.findOne(this.getQuery());
     const updateObj = this.getUpdate()  // Pego as informações novas
 
     // Separando atributos e especialidades
     const { attributes, specialitys } = updateObj
-    const {
-        strengh: strenghSpecs,  // Especialidades de Força
-        dexterity: dexSpecs, // Especialidades de Destreza
-        constituition: constSpecs,  // Especialidades de Constituição
-        vigillance: vigSpecs, // Especialidades de Vigilância
-    } = specialitys
+    if (attributes || specialitys) {
+        const {
+            strengh: strenghSpecs,  // Especialidades de Força
+            dexterity: dexSpecs, // Especialidades de Destreza
+            constituition: constSpecs,  // Especialidades de Constituição
+            vigillance: vigSpecs, // Especialidades de Vigilância
+        } = specialitys
 
-    // Calculando Vida
-    const life = calcLife(
-        attributes.constituition,  // Passo minha constituição
-        constSpecs?.painResistence,
-        constSpecs?.imunity,
-        constSpecs?.force,
-    )
-    // Nota: A exclamação serve para indicar que, se constSpecs não for UNDEFINED, eu passo o atributo 'painResistence'
+        // Calculando Vida
+        const life = calcLife(
+            attributes.constituition,  // Passo minha constituição
+            constSpecs?.painResistence,
+            constSpecs?.imunity,
+            constSpecs?.force,
+        )
+        // Nota: A exclamação serve para indicar que, se constSpecs não for UNDEFINED, eu passo o atributo 'painResistence'
 
-    // Calculando Energia Mental
-    const mentalEnergy = calcMentalEnergy(
-        attributes.constituition,
-        strenghSpecs?.mindResistence,
-        constSpecs?.force
-    )
+        // Calculando Energia Mental
+        const mentalEnergy = calcMentalEnergy(
+            attributes.constituition,
+            strenghSpecs?.mindResistence,
+            constSpecs?.force
+        )
 
-    // Calculando Dificuldade do Acerto
-    const successDifficult = calcSuccessDifficult(
-        attributes.dexterity,
-        dexSpecs?.dodge,
-        vigSpecs?.reflex
-    )
+        // Calculando Dificuldade do Acerto
+        const successDifficult = calcSuccessDifficult(
+            attributes.dexterity,
+            dexSpecs?.dodge,
+            vigSpecs?.reflex
+        )
 
-    // Calculando Movimento
-    const movement = calcMovement(
-        attributes.strengh,
-        attributes.dexterity,
-        strenghSpecs?.athletics,
-        strenghSpecs?.jump
-    )
+        // Calculando Movimento
+        const movement = calcMovement(
+            attributes.strengh,
+            attributes.dexterity,
+            strenghSpecs?.athletics,
+            strenghSpecs?.jump
+        )
 
-    this.set({  // Coloco o novo objeto dentro do Schema a ser salvo
-        combat: {
-            life: life,
-            mentalEnergy: mentalEnergy,
-            movement: movement,
-            da: successDifficult,
-            shield: 0
-        },
-        updatedAt: new Date()
-    })
-
+        this.set({  // Coloco o novo objeto dentro do Schema a ser salvo
+            combat: {
+                life: life,
+                mentalEnergy: mentalEnergy,
+                movement: movement,
+                da: successDifficult,
+                shield: 0
+            },
+            updatedAt: new Date()
+        })
+    } else {
+        this.set(updateObj)
+    }
     next()
 })
 

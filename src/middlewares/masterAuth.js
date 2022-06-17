@@ -10,24 +10,35 @@ module.exports = (req, res, next) => {
     const authHeader = req.headers.authorization;  // Pego o token
 
     // Se o token não for passado
-    if (!authHeader) return res.status(401).send({ error: 'Nenhum token providenciado' })
+    if (!authHeader) return res.status(401).send({
+        error: true,
+        msg: 'Sem token!'
+    })
 
     // Separo o token em duas partes (Uma deve conter Bearer)
     const parts = authHeader.split(' ')
 
     // Se não tiver sido separado em duas partes
-    if (!parts.length === 2) return res.status(401).send({ error: 'Erro na síntaxe do token' })
+    if (!parts.length === 2) return res.status(401).send({
+        error: true,
+        msg: 'Token com falha na sintaxe'
+    })
 
     // Pego a primeira parte e o token em si
     const [ scheme, token ] = parts;
 
     // Se a primeira parte não começar com JOJO eu retorno um erro
-    if (!/^JOJO$/i.test(scheme)) return res.status(401).send({ error: 'Token errado' })
+    if (!/^JOJO$/i.test(scheme)) return res.status(401).send({
+        error: true,
+        msg: 'Incio inválido'
+    })
 
     // Faço uma verificação pelo JWT para saber se o token é valido
     jwt.verify(token, process.env.APP_HASH, (err, decoded) => {
-        if (err) res.status(401).send({ error: 'Invalid token' })
-        req.access = decoded.accessKey
+        if (err) return res.json({
+            error: true,
+            msg: 'Invalid token'
+        })
         req.id = decoded.id
         req.email = decoded.email
         return next();
