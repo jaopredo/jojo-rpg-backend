@@ -41,6 +41,7 @@ module.exports = (req, res, next) => {
         })
         req.id = decoded.id
         req.email = decoded.email
+        req.access = decoded.access
         return next();
     })
     /*

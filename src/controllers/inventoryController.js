@@ -6,6 +6,7 @@ const Inventory = require('../database/schemas/InventorySchema')
 /* MIDDLEWARES */
 const masterAuth = require('../middlewares/masterAuth')
 const charValidation = require('../middlewares/charValidation')
+const dmAuth = require('../middlewares/dmAuth')
 
 // Retorna inventário
 router.get('/', masterAuth, charValidation, async (req, res) => {

@@ -10,13 +10,10 @@ const Npc = require('../database/schemas/NpcSchema')
 
 /* MIDDLEWARE */
 const masterAuth = require('../middlewares/masterAuth')
+const dmAuth = require('../middlewares/dmAuth.js')
 
 /* DELETAR UM PLAYER */
-router.delete('/remove', masterAuth, async (req, res) => {
-    const access = req.access
-    if (access !== 'master') {
-        return res.status(404).json({ error: 'Acesso negado! Deve ser um mestre' })
-    }
+router.delete('/remove', masterAuth, dmAuth, async (req, res) => {
     const email = req.query.email
 
     // Checando se o email foi passado
@@ -40,10 +37,7 @@ router.delete('/remove', masterAuth, async (req, res) => {
 })
 
 /* PEGA TODOS OS PERSONAGENS */
-router.get('/characters', masterAuth, async (req, res) => {
-    const { access } = req
-    if (access !== 'master') return res.json({ error: 'Rota não autorizada' })
-    
+router.get('/characters', masterAuth, dmAuth, async (req, res) => {
     const allPlayers = await Player.find({})
     const allNPC = await Npc.find({})
 
@@ -53,14 +47,37 @@ router.get('/characters', masterAuth, async (req, res) => {
     })
 })
 
-/* PEGA TODOS OS STANDS */
-router.get('/stands', masterAuth, async (req, res) => {
-    const { access } = req
-    if (access !== 'master') return res.json({ error: 'Rota não autorizada' })
-    
-    const allStands = await Stand.find({})
+router.get('/getplayerchar', masterAuth, dmAuth, async (req, res) => {
+    const { id } = req.query
+    const character = await Character.findOne({ playerId: id })
+    const stand = await Stand.findOne({ playerId: id })
+    const substand = await SubStand.findOne({ playerId: id })
+    const inventory = await Inventory.findOne({ playerId: id })
 
-    return res.send(allStands)
+    return res.json({
+        character: character,
+        stand: stand,
+        substand: substand,
+        inventory: inventory,
+    })
+})
+
+/* PEGA TODOS OS STANDS */
+router.get('/stand', masterAuth, dmAuth, async (req, res) => {
+    const { id } = req.query;
+    
+    const stand = await Stand.findOne({ npcId: id });
+
+    return res.send(stand)
+})
+
+router.get('/substand', masterAuth, dmAuth, async (req, res) => {
+    const { id } = req.query;
+    
+    const substand = await SubStand.findOne({ npcId: id });
+    if (!substand) return res.json({})
+
+    return res.send(substand)
 })
 
 module.exports = app => app.use('/dm', router)

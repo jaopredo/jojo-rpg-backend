@@ -18,8 +18,7 @@ const NpcSchema = new mongoose.Schema({
         name: { type: String, required: true },
         age: { type: Number, required: true, min: 20, max: 70 },
         race: { type: String, required: true },
-        patent: { type: String, required: true },
-        ocupation: { type: String, required: true },
+        occupation: { type: String, required: true },
     },
     attributes: {
         strengh: Number,

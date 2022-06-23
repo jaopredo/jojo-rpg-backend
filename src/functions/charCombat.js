@@ -1,5 +1,5 @@
 function calcLife(constituition, painResistence=false, imunity=false, force=false){
-    return 10 + constituition + (painResistence?5:0) + (imunity?5:0) + (force?5:0)
+    return Math.floor((10 + constituition) * 2 + ((painResistence?5:0) + (imunity?5:0) + (force?5:0)) * (constituition/5))
 }
 
 function calcMentalEnergy(constituition, mindResistence=false, force=false) {
