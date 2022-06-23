@@ -3,7 +3,6 @@ const router = require('express').Router()
 /* MONGODB */
 const Stand = require('../database/schemas/StandSchema')
 const SubStand = require('../database/schemas/SubStandSchema')
-const Inventory = require('../database/schemas/InventorySchema')
 const Npc = require('../database/schemas/NpcSchema')
 
 /* MIDDLEWARES */
@@ -32,8 +31,6 @@ router.post('/', masterAuth, dmAuth, async (req, res) => {
         })
     }
 
-    await Inventory.create({ npcId: npc.id })  // Crio o inventário dele
-
     return res.send({
         error: false,
         msg: 'Criado com sucesso!'
@@ -41,9 +38,9 @@ router.post('/', masterAuth, dmAuth, async (req, res) => {
 })
 
 router.delete('/', masterAuth, dmAuth, async (req, res) => {
-    const { npcId } = req.query;
+    const { id } = req.query;
 
-    const npc = await Npc.findById(npcId);
+    const npc = await Npc.findById(id);
     if (!npc) return res.json({
         error: true,
         msg: 'Não há nenhum npc com esse ID'
@@ -52,8 +49,7 @@ router.delete('/', masterAuth, dmAuth, async (req, res) => {
     
     await Stand.findOneAndDelete({ npcId: npc.id })
     await SubStand.findOneAndDelete({ npcId: npc.id })
-    await Inventory.findOneAndDelete({ npcId: npc.id })
-    await Npc.findByIdAndDelete(npcId);
+    await Npc.findByIdAndDelete(id);
 
     return res.json({
         error: false,

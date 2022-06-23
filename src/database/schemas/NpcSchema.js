@@ -16,7 +16,7 @@ const log = require('../../functions/log')
 const NpcSchema = new mongoose.Schema({
     basic: {
         name: { type: String, required: true },
-        age: { type: Number, required: true, min: 20, max: 70 },
+        age: { type: Number, required: true, min: 20 },
         race: { type: String, required: true },
         occupation: { type: String, required: true },
     },

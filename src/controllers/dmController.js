@@ -32,7 +32,7 @@ router.delete('/remove', masterAuth, dmAuth, async (req, res) => {
     await Player.deleteOne({ email })
 
     return res.status(200).json({
-        message: 'Player deletado com sucesso!'
+        msg: 'Player deletado com sucesso!'
     })
 })
 
