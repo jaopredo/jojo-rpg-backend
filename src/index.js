@@ -5,7 +5,7 @@ const cors = require('cors')
 const app = express()
 
 const corsConfig = {
-    origin: ["http://testing.local", "https://my-movie-db-roberto.herokuapp.com", "http://localhost:3000"],
+    origin: [ "https://jojo-rpg-frontend.herokuapp.com" ],
     credentials: true,
     methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
     allowedHeaders: ['Content-Type']
