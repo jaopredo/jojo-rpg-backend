@@ -8,7 +8,7 @@ const corsConfig = {
     origin: [ "https://jojo-rpg-frontend.herokuapp.com" ],
     credentials: true,
     methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
-    allowedHeaders: ['Content-Type']
+    allowedHeaders: ['Content-Type', 'authorization']
 };
 
 app.use(cors(corsConfig));
