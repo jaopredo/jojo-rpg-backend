@@ -1,5 +1,6 @@
 const router = require('express').Router()
 
+
 /* SCHEMAS */
 const Stand = require('../database/schemas/StandSchema')
 
@@ -14,7 +15,4 @@ router.get('/', masterAuth, charValidation, async (req, res) => {
     return res.json(stand);
 })
 
-module.exports = app => {
-    app.use(cors({ origin: 'https://jojo-rpg-frontend.herokuapp.com' }))
-    app.use('/stand', router)
-}
+module.exports = app => app.use('/stand', router)

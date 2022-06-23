@@ -4,7 +4,15 @@ const cors = require('cors')
 
 const app = express()
 
-app.use(cors({ origin: 'https://jojo-rpg-frontend.herokuapp.com' }))
+const corsConfig = {
+    origin: ["http://testing.local", "https://my-movie-db-roberto.herokuapp.com", "http://localhost:3000"],
+    credentials: true,
+    methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ['Content-Type']
+};
+
+app.use(cors(corsConfig));
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
@@ -15,5 +23,7 @@ require('./controllers/subStandController')(app)
 require('./controllers/dmController')(app)
 require('./controllers/npcController')(app)
 require('./controllers/inventoryController')(app)
+
+app.options("*", cors(corsConfig));
 
 app.listen(process.env.PORT || 3030)
