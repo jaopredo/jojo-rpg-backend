@@ -16,14 +16,6 @@ const advantages = require('../functions/advantages')
 const completeValidation = require('../middlewares/completeValidation')
 const checkPlayerDatabase = require('../middlewares/checkPlayerDatabase')
 
-router.get('/teste', (req, res) => {
-    return res.send({teste: 'teste'});
-})
-router.post('/teste', (req, res) => {
-    console.log(req.body)
-    return res.send({teste: 'teste'})
-})
-
 /* ROTA DE REGISTRO */
 router.post('/register', checkPlayerDatabase, completeValidation, async (req, res) => {
     const {
