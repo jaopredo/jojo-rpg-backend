@@ -18,7 +18,7 @@ const CharacterSchema = new mongoose.Schema({
     playerId: mongoose.Schema.Types.ObjectId,
     basic: {
         name: { type: String, required: true },
-        age: { type: Number, required: true, min: 20, max: 70 },
+        age: { type: Number, required: true, min: 20 },
         race: { type: String, required: true },
         occupation: { type: String, required: true },
     },
