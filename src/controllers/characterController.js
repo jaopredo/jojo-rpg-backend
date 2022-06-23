@@ -25,7 +25,8 @@ router.get('/', masterAuth, charValidation, async (req, res) => {
 router.patch('/saveXP', masterAuth, charValidation, async (req, res) => {
     const { newXP } = req.body;  // Pego o xp passado
     
-    const { level } = await Character.findOne({ playerId: req.id })
+    const character = await Character.findOne({ playerId: req.id })
+    const { level } = character
 
     if (newXP === -1) return res.json({ msg: 'not updated' })
     await Character.updateOne({ playerId: req.id }, {
