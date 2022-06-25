@@ -19,6 +19,7 @@ const NpcSchema = new mongoose.Schema({
         age: { type: Number, required: true, min: 20 },
         race: { type: String, required: true },
         occupation: { type: String, required: true },
+        history: { type: String, required: true }
     },
     attributes: {
         strengh: Number,

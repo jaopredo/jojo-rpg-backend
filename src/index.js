@@ -5,7 +5,11 @@ const cors = require('cors')
 const app = express()
 
 const corsConfig = {
-    origin: [ "https://jojo-rpg-frontend.herokuapp.com", "http://jojo-rpg-dm.herokuapp.com" ],
+    origin: [
+        "https://jojo-rpg-frontend.herokuapp.com",
+        "http://jojo-rpg-dm.herokuapp.com",
+        // "http://localhost:3000"
+    ],
     credentials: true,
     methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
     allowedHeaders: ['Content-Type', 'authorization']
