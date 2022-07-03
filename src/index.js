@@ -8,7 +8,9 @@ const corsConfig = {
     origin: [
         "https://jojo-rpg-frontend.herokuapp.com",
         "https://jojo-rpg-dm.herokuapp.com",
-        // "http://localhost:3000"
+        "http://jojo-rpg-frontend.herokuapp.com",
+        "http://jojo-rpg-dm.herokuapp.com",
+        // "http://localhost:3000
     ],
     credentials: true,
     methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",

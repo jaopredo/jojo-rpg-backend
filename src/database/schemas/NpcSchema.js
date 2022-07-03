@@ -14,6 +14,7 @@ const log = require('../../functions/log')
 
 /* Schema do Personagem */
 const NpcSchema = new mongoose.Schema({
+    npcType: { type: String, required: true },
     basic: {
         name: { type: String, required: true },
         age: { type: Number, required: true, min: 20 },
