@@ -138,7 +138,6 @@ NpcSchema.pre('save', function(next) {
     // Calculando Dificuldade do Acerto
     const successDifficult = calcSuccessDifficult(
         attributes.dexterity,
-        dexSpecs?.dodge,
         vigSpecs?.reflex
     )
 
