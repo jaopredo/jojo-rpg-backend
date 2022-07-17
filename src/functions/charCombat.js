@@ -10,8 +10,8 @@ function calcMovement(strengh, dexterity, athletics=false, jump=false) {
     return strengh + dexterity + (athletics?5:0) + (jump?5:0)
 }
 
-function calcSuccessDifficult(dexterity, reflex=false) {
-    return Math.floor(5 + dexterity/2 + (reflex?5:0))
+function calcSuccessDifficult(dexterity, vigillance, reflex=false) {
+    return Math.floor((dexterity + vigillance)/2 + (reflex?5:0))
 }
 
 module.exports = {
